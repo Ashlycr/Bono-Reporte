@@ -1,0 +1,89 @@
+---
+title: "Reporte Bono"
+author: "Ash"
+date: "24/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+## R Markdown
+
+```{r}
+data <- read.csv("D:/ASH-PROYECTO/BEST/tarea/bono.csv", sep=";")
+
+
+library(tidyverse)
+
+data=rename(data,DEPARTAMENTO=DE_DEPARTAMENTO,PROVINCIA=DE_PROVINCIA,
+            DISTRITO=DE_DISTRITO)
+
+data$DEPARTAMENTO=as.factor(data$DEPARTAMENTO)
+data$PROVINCIA=as.factor(data$PROVINCIA)
+data$DISTRITO=as.factor(data$DISTRITO)
+data$BONO_COBRADO=as.factor(data$BONO_COBRADO)
+data$MEDIO_COBRO=as.factor(data$MEDIO_COBRO)
+
+data<- data %>% 
+  mutate(FECHA_COBRO= substring(FECHA_COBRO,1,10))
+
+data$FECHA_COBRO<- strptime(data$FECHA_COBRO, "%Y-%m-%d")
+```
+# DEPARTAMENTO 
+se muestra el departamento...
+
+```{r} 
+  data %>% 
+  group_by(DEPARTAMENTO,BONO_COBRADO) %>% 
+  summarise(count=n(),
+            promedio=median(PERSONAS_HOGAR),
+            mediana=median(PERSONAS_HOGAR),
+            max=max(PERSONAS_HOGAR),
+            min=min(PERSONAS_HOGAR)) %>% 
+  mutate(monto=count*760)
+
+```
+
+
+```{r}
+DEPARTAMENTO_SI=data %>% 
+group_by(DEPARTAMENTO,BONO_COBRADO) %>% 
+  filter(BONO_COBRADO=="SI") %>% 
+  summarise(count=n(),
+            promedio=median(PERSONAS_HOGAR),
+            mediana=median(PERSONAS_HOGAR),
+            max=max(PERSONAS_HOGAR),
+            min=min(PERSONAS_HOGAR)) %>% 
+  mutate(monto=count*760)
+DEPARTAMENTO_SI
+```
+
+
+```{r}
+ggplot(DEPARTAMENTO_SI, aes(x=DEPARTAMENTO, y=count,fill=DEPARTAMENTO)) + 
+  geom_bar(stat="identity") +coord_flip()+
+  ggtitle("Personas que cobraron el bono según departamento")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
