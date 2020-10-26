@@ -32,6 +32,8 @@ La cantidad de personas qeue cobraron y que no.
             max=max(PERSONAS_HOGAR),
             min=min(PERSONAS_HOGAR)) %>% 
   mutate(monto=count*760)
+  
+# CUADROS DE ANÁLISIS
 
 Ahora filtramos, sólo si han cobrado.
 ```{r}
